@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     git credentialsId: 'jenkins-agent-node',
-                        url: 'git@github.com:DEL-ORG/s8-web-2.git',
+                        url: 'https://github.com/s8kevinaf02/docker-hub.git',
                         branch: "${params.BRANCH_NAME}"
                 }
             }
