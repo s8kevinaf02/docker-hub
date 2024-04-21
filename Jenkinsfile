@@ -51,12 +51,24 @@ pipeline {
                 }
             }
         }
+        stage('login to docker hub') {
+            steps {
+                script{
+                    //login to Docker hub
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', 
+                    usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) 
+                    sh"""
+                    docker login -u ${env.DOCKER_HUB_USERNAME} -p ${env.DOCKER_HUB_PASSWORD}
+                    """
+                  }
+                }
+            }
+        }
+        st
         stage('Pushing images to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                     script {
                         sh """
-                            docker login -u ${env.DOCKER_HUB_USERNAME} -p ${env.DOCKER_HUB_PASSWORD}
                             docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG}
                             docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
                         """
