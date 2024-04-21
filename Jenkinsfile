@@ -63,6 +63,7 @@ pipeline {
                         sh """
                             docker rm -f ${params.CONTAINER_NAME}
                             echo "Error deploying application 01: ${e.message}"
+                            docker logs ${params.CONTAINER_NAME}
                             exit 1
                         """
                     }
@@ -81,6 +82,7 @@ pipeline {
                         sh """
                             docker rm -f ${params.CONTAINER_NAME}
                             echo "Error deploying application 02: ${e.message}"
+                            docker logs ${params.CONTAINER_NAME}
                             exit 1
                         """
                     }
