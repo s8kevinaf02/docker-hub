@@ -103,6 +103,9 @@ pipeline {
                 cleanUpContainers("app-contain-02")
             }
         }
+        success{
+            echo "pipeline succeed"
+        }
     }
 }
 
