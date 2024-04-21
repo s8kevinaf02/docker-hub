@@ -4,6 +4,7 @@ pipeline {
         DOCKER_HUB_USERNAME = "s8kevinaf02"
         ALPHA_APPLICATION_01_REPO = "alpha-application-01"
         ALPHA_APPLICATION_02_REPO = "alpha-application-02"
+        DOCKER_HUB_PASSWORD = credentials('docker-hub-password')
     }
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: '')
@@ -51,6 +52,17 @@ pipeline {
                 }
             }
         }
+        stage('Pushing images to Docker Hub') {
+            steps {
+                script {
+                    sh """
+                        docker login -u ${env.DOCKER_HUB_USERNAME} -p ${env.DOCKER_HUB_PASSWORD}
+                        docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG}
+                        docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
+                    """
+                }
+            }
+        }
         stage('Deploying the application 01') {
             steps {
                 script {
@@ -86,17 +98,6 @@ pipeline {
                             exit 1
                         """
                     }
-                }
-            }
-        }
-        stage('Pushing images to Docker Hub') {
-            steps {
-                script {
-                    sh """
-                        docker login -u ${env.DOCKER_HUB_USERNAME} -p ${DOCKER_HUB_PASSWORD}
-                        docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG}
-                        docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
-                    """
                 }
             }
         }
