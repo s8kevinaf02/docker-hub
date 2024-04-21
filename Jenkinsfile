@@ -9,7 +9,7 @@ pipeline {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: '')
         string(name: 'APP1_TAG', defaultValue: 'app1.1.1.0', description: '')
         string(name: 'APP2_TAG', defaultValue: 'app2.1.1.0', description: '')
-        string(name: 'PORT_ON_DOCKER_HOST', defaultValue: '', description: '')
+        string(name: 'PORT_ON_DOCKER_HOST', defaultValue: '3333', description: '')
         string(name: 'CONTAINER_NAME', defaultValue: 'app-container', description: '')
     }
     stages {
@@ -56,13 +56,14 @@ pipeline {
                 script {
                     try {
                         sh """
+                            docker rm -f ${params.CONTAINER_NAME} || true
                             docker run -itd -p ${params.PORT_ON_DOCKER_HOST}:80 --name ${params.CONTAINER_NAME} ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG}
                             docker ps |grep ${params.CONTAINER_NAME}
                         """ 
                     } catch (Exception e) {
                         sh """
-                            docker rm -f ${params.CONTAINER_NAME}
                             echo "Error deploying application 01: ${e.message}"
+                            docker logs ${params.CONTAINER_NAME}
                             exit 1
                         """
                     }
@@ -74,13 +75,14 @@ pipeline {
                 script {
                     try {
                         sh """
+                            docker rm -f ${params.CONTAINER_NAME} || true
                             docker run -itd -p ${params.PORT_ON_DOCKER_HOST}:80 --name ${params.CONTAINER_NAME} ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
                             docker ps |grep ${params.CONTAINER_NAME}
                         """ 
                     } catch (Exception e) {
                         sh """
-                            docker rm -f ${params.CONTAINER_NAME}
                             echo "Error deploying application 02: ${e.message}"
+                            docker logs ${params.CONTAINER_NAME}
                             exit 1
                         """
                     }
