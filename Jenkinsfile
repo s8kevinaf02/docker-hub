@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_USERNAME="devopseasylearning"
+        DOCKER_HUB_USERNAME="s8kevinaf02s"
         ALPHA_APPLICATION_01_REPO="alpha-application-01"
         ALPHA_APPLICATION_02_REPO="alpha-application-02"
     }
