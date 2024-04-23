@@ -96,50 +96,50 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            script {
-                cleanUpContainers("app-contain-01")
-                cleanUpContainers("app-contain-02")
-            }
-        }
-        success{
-            echo "pipeline succeed"
-        }
-    }
-}
+//     post {
+//         always {
+//             script {
+//                 cleanUpContainers("app-contain-01")
+//                 cleanUpContainers("app-contain-02")
+//             }
+//         }
+//         success{
+//             echo "pipeline succeed"
+//         }
+//     }
+// }
 
-def dockerBuild(imageTag, dockerFile) {
-    sh "docker build -t ${imageTag} ${dockerFile}"
-}
+// def dockerBuild(imageTag, dockerFile) {
+//     sh "docker build -t ${imageTag} ${dockerFile}"
+// }
 
-def dockerImagesCheck(tag) {
-    sh "docker images | grep ${tag}"
-}
+// def dockerImagesCheck(tag) {
+//     sh "docker images | grep ${tag}"
+// }
 
-def dockerPush(imageTag) {
-    sh "docker push ${imageTag}"
-}
+// def dockerPush(imageTag) {
+//     sh "docker push ${imageTag}"
+// }
 
-def dockerRun(containerName, hostPort, imageTag) {
-    sh """
-        docker rm -f ${containerName} || true
-        docker run -itd -p ${hostPort}:80 --name ${containerName} ${imageTag}
-    """
-}
+// def dockerRun(containerName, hostPort, imageTag) {
+//     sh """
+//         docker rm -f ${containerName} || true
+//         docker run -itd -p ${hostPort}:80 --name ${containerName} ${imageTag}
+//     """
+// }
 
-def dockerPS(containerName) {
-    sh "docker ps | grep ${containerName}"
-}
+// def dockerPS(containerName) {
+//     sh "docker ps | grep ${containerName}"
+// }
 
-def handleDeploymentError(Exception e, String appNumber) {
-    sh """
-        echo "Error deploying application ${appNumber}: ${e.message}"
-        docker logs app-contain-${appNumber}
-        exit 1
-    """
-}
+// def handleDeploymentError(Exception e, String appNumber) {
+//     sh """
+//         echo "Error deploying application ${appNumber}: ${e.message}"
+//         docker logs app-contain-${appNumber}
+//         exit 1
+//     """
+// }
 
-def cleanUpContainers(containerName) {
-    sh "docker rm -f ${containerName} || true"
-}
+// def cleanUpContainers(containerName) {
+//     sh "docker rm -f ${containerName} || true"
+// }
